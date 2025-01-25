@@ -1,47 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Woof Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woof Hub - Login</title>
     <style>
+        /* Body styling */
         body {
-            background-color: rgb(255, 255, 255);
-            color: black;
-        }
-
-        #container {
-            position: absolute;
-            top: 150px;
-            left: 550px;
-        }
-
-        #contents {
-            text-align: center;
+            background-color: #f1f1f1;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
             align-items: center;
+            height: 100vh;
+        }
+
+        /* Container for the form */
+        #container {
+            background-color: #B9D9E7;
+            width: 300px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #6F2DA8;
+            margin-bottom: 10px;
+        }
+
+        /* Form element styling */
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #6F2DA8;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5a1b84;
+        }
+
+        .text-link {
+            color: #6F2DA8;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .text-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Adjusts the button layout */
+        .button-container {
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
-    <form action="next.html" method="GET">
-        <div id="container"
-            style="background-color: rgb(185, 217, 231);width: 200px;height: 200px;padding: 20px;border: 2px solid rgb(148, 190, 218);">
-            <div id="contents">
-                <label>Email</label>
-                <input type="email" placeholder="Enter your registered email:" required>
+    <div id="container">
+        <h2>Woof Hub Login</h2>
+        <form action="next.html" method="GET">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your registered email" required>
 
-                <label>Password</label>
-                <input type="password" placeholder="Enter your password:" required>
-                <p></p>
-                <button type="submit">Login</button>
-                
-                <p>Don't have an account?</p>
-                <form id="dog-guide-form" action="register.html" method="get">
-                <button type="button">Register</button>
-            </form>
-            </div>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don't have an account?</p>
+        <div class="button-container">
+            <a href="register.html" class="text-link">Register here</a>
         </div>
-    </form>
+    </div>
 </body>
 
 </html>
