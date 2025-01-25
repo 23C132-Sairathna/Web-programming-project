@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Adoption form</title>
+    </head>
+    <body>
+        <form>
+            <fieldset>
+                <legend>ADOPTION FORM</legend>
+                <label for="name">Enter your name:</label>
+                <input type="text" id="name" name="username" required placeholder="enter your name"><br><br>
+                <label for="email">Enter your email:</label>
+                <input type="email" id="email" name="email" required placeholder="enter your mail-id"><br><br>
+                <label for="phone">Enter your phone no:</label>
+                <input type="tel" id="phone" name="phone" required placeholder="enter your phone no"><br><br>
+                <label for="DOB">Enter your date of birth:</label>
+                <input type="date" id="DOB" name="DOB" required placeholder="enter your date of birth"><br><br>
+                <label for="password">Enter your password:</label>
+                <input type="password" id="password" name="pass" required placeholder="enter your password"><br><br>
+                <div>
+                    <label for="gender">Enter your gender:</label>
+                    <label for="male">Male</label>
+                    <input type="radio" id="male" name="male" value="male">
+                    <label for="female">Female</label>
+                    <input type="radio" id="female" name="female" value="female">
+                    <label for="other">other</label>
+                    <input type="radio" id="other" name="other" value="other">
+                          
+                </div>
+                <label for="conform-password">Conform your password:</label>
+                <input type="password" id="conform-password" name="conpass" required placeholder="Conform your password"><br><br>
+                <label for="age">Enter the age category:</label>
+                <input type="number" id="age" name="age" required placeholder="enter the age category"><br><br>
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows=4 required placeholder="enter the address"></textarea><br><br>
+                <label for="petage">Enter the age category(for pet):</label>
+                <input type="number" id="petage" name="petage" required placeholder="enter the age category(for pet)"><br><br>            
+                <label for="animal_type">Preferred Animal Type:</label>
+                <select id="animal_type" name="animal_type" required>
+                <option value="golden retriever">golden retriver</option>
+                <option value="pommerian">pommerian</option>
+                <option value="german sheperd">german sheperd</option>
+                <option value="labrodor">labrodor</option>
+               <option value="other">Other</option>
+              </select><br><br>
+              <button type="submit">submit</button>
+
+
+            </fieldset>
+        </form>
+    </body>
+</html>
