@@ -21,35 +21,36 @@
         <p>Your One-Stop Guide to Happy, Healthy Paws!</p>
     </div>
 
-        <form id="dog-guide-form" >
+    <form id="dog-guide-form" action="login.html" method="get">
+
             <div style="margin-bottom: 15px;">
                 <label for="name" style="display: block; text-align: left; margin-bottom: 5px; width: 100%;">Your Name (the human!):</label>
                 <input type="text" id="name" name="name" placeholder="What's your name?"
-                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;">
+                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;" required>
                 <small id="name-error" style="color: red;"></small>
             </div>
             <div style="margin-bottom: 15px;">
                 <label for="dog-name" style="display: block; text-align: left; margin-bottom: 5px; width: 100%;">Your Dog’s Name:</label>
                 <input type="text" id="dog-name" name="dogName" placeholder="What's your dog’s name?"
-                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;">
+                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;" required>
                 <small id="dog-name-error" style="color: red;"></small>
             </div>
             <div style="margin-bottom: 15px;">
                 <label for="dog-breed" style="display: block; text-align: left; margin-bottom: 5px; width: 100%;">What breed is your dog?</label>
                 <input type="text" id="dog-breed" name="dogBreed" placeholder="What breed is your dog?"
-                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;">
+                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;" required>
                 <small id="dog-breed-error" style="color: red;"></small>
             </div>
             <div style="margin-bottom: 15px;">
                 <label for="email" style="display: block; text-align: left; margin-bottom: 5px; width: 100%;">Your Email:</label>
                 <input type="email" id="email" name="email" placeholder="What's your email?"
-                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;">
+                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;" required>
                 <small id="email-error" style="color: red;"></small>
             </div>
             <div style="margin-bottom: 15px;">
                 <label for="phone" style="display: block; text-align: left; margin-bottom: 5px; width: 100%;">Your Phone Number:</label>
                 <input type="tel" id="phone" name="phone" placeholder="What’s your phone number?"
-                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;">
+                    style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box;" required>
                 <small id="phone-error" style="color: red;"></small>
             </div>
             <button type="submit"
