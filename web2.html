@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>District-to-Country-State Lookup</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        #mouseArea {
+            width: 300px;
+            height: 300px;
+            border: 2px solid #000;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>JavaScript Event Handling with Timer, Key Events, and District Lookup</h1>
+
+    <!-- District input field -->
+    <label for="district">Enter District:</label>
+    <input type="text" id="district" oninput="lookupCountryState()" placeholder="Type a district">
+    
+    <p id="countryMessage"></p>
+    <p id="stateMessage"></p>
+
+    <!-- Readonly input field -->
+    <label for="readonlyField">Readonly Input:</label>
+    <input type="text" id="readonlyField" value="You can't edit this" readonly>
+
+    <br><br>
+
+    <!-- Mouse event area -->
+    <div id="mouseArea">
+        <p>Click or Double-click inside this area.</p>
+    </div>
+
+    <p id="mouseMessage"></p>
+
+    <!-- Hidden section -->
+    <div id="hiddenSection" class="hidden">
+        <h3>This section is hidden!</h3>
+        <p>Click the button below to toggle visibility.</p>
+    </div>
+    
+    <button onclick="toggleVisibility()">Toggle Hidden Section</button>
+
+    <br><br>
+
+    <!-- Save user session -->
+    <button onclick="saveSession()">Save Session</button>
+    <button onclick="loadSession()">Load Session</button>
+    <p id="sessionMessage"></p>
+
+    <br><br>
+
+    <!-- Timer section -->
+    <h2>Timer: <span id="timerDisplay">0</span> seconds</h2>
+
+    <br><br>
+
+    <!-- Key event info -->
+    <p>Press the "Enter" or "Space" key to see the key event in action.</p>
+    <p id="keyEventMessage"></p>
+
+    <script>
+        // Mock data for districts and their corresponding country and state
+        const districtLookup = {
+            "Los Angeles": { country: "United States", state: "California" },
+            "Mumbai": { country: "India", state: "Maharashtra" },
+            "London": { country: "United Kingdom", state: "England" },
+            "Dallas": { country: "United States", state: "Texas" },
+            "Bangalore": { country: "India", state: "Karnataka" }
+        };
+
+        // Function to handle changes in the country dropdown
+        function countryChanged() {
+            const country = document.getElementById('country').value;
+            const countryMessage = document.getElementById('countryMessage');
+            if (country) {
+                countryMessage.textContent = `You selected: ${country}`;
+                sessionStorage.setItem('selectedCountry', country);  // Save country selection in sessionStorage
+            } else {
+                countryMessage.textContent = '';
+                sessionStorage.removeItem('selectedCountry');
+            }
+        }
+
+        // Mouse event handlers
+        const mouseArea = document.getElementById('mouseArea');
+        
+        mouseArea.addEventListener('click', function() {
+            document.getElementById('mouseMessage').textContent = 'Mouse clicked inside the area!';
+        });
+
+        mouseArea.addEventListener('dblclick', function() {
+            document.getElementById('mouseMessage').textContent = 'Mouse double-clicked inside the area!';
+        });
+
+        mouseArea.addEventListener('mousemove', function(event) {
+            document.getElementById('mouseMessage').textContent = `Mouse moved at position: (${event.clientX}, ${event.clientY})`;
+        });
+
+        // Toggle the hidden section
+        function toggleVisibility() {
+            const hiddenSection = document.getElementById('hiddenSection');
+            if (hiddenSection.classList.contains('hidden')) {
+                hiddenSection.classList.remove('hidden');
+            } else {
+                hiddenSection.classList.add('hidden');
+            }
+        }
+
+        // Session handling
+        function saveSession() {
+            const country = document.getElementById('country').value;
+            if (country) {
+                sessionStorage.setItem('selectedCountry', country);
+                document.getElementById('sessionMessage').textContent = `Country saved in session: ${country}`;
+            } else {
+                document.getElementById('sessionMessage').textContent = 'Please select a country first!';
+            }
+        }
+
+        function loadSession() {
+            const country = sessionStorage.getItem('selectedCountry');
+            if (country) {
+                document.getElementById('sessionMessage').textContent = `Loaded from session: ${country}`;
+            } else {
+                document.getElementById('sessionMessage').textContent = 'No country saved in session.';
+            }
+        }
+
+        // Timer functionality
+        let timer = 0;
+        let timerInterval;
+
+        // Start the timer
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                timer++;
+                document.getElementById('timerDisplay').textContent = timer;
+            }, 1000);  // Increment timer every second
+        }
+
+        // Stop the timer when the user presses a key (Enter or Space)
+        document.addEventListener('keydown', function(event) {
+            const keyEventMessage = document.getElementById('keyEventMessage');
+            if (event.key === 'Enter') {
+                keyEventMessage.textContent = 'Enter key pressed! Stopping the timer...';
+                clearInterval(timerInterval);  // Stop the timer
+            } else if (event.key === ' ') {
+                keyEventMessage.textContent = 'Space key pressed! Stopping the timer...';
+                clearInterval(timerInterval);  // Stop the timer
+            }
+        });
+
+        // Start the timer automatically when the page loads
+        window.onload = startTimer;
+
+        // Function to look up country and state based on district
+        function lookupCountryState() {
+            const districtInput = document.getElementById('district').value.trim();
+            const countryMessage = document.getElementById('countryMessage');
+            const stateMessage = document.getElementById('stateMessage');
+
+            if (districtInput && districtLookup[districtInput]) {
+                const { country, state } = districtLookup[districtInput];
+                countryMessage.textContent = `Country: ${country}`;
+                stateMessage.textContent = `State: ${state}`;
+            } else {
+                countryMessage.textContent = '';
+                stateMessage.textContent = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
