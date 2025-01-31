@@ -17,7 +17,7 @@
     }
   </style>
   <script>
-    // Sample data for countries, states, and cities
+   
     const data = {
       "USA": {
         "California": ["Los Angeles", "San Francisco", "San Diego"],
@@ -29,7 +29,86 @@
       }
     };
 
-    // On change event to update state dropdown based on selected country
+    
+    function Timer() {
+      this.seconds = 0;
+      this.timerInterval = null;
+      this.running = false;
+
+      
+      this.start = function() {
+        if (!this.running) {
+          this.running = true;
+          this.timerInterval = setInterval(() => {
+            this.seconds++;
+            updateTimerDisplay(this.seconds); 
+          }, 1000);
+        }
+      };
+
+     
+      this.stop = function() {
+        if (this.running) {
+          clearInterval(this.timerInterval);
+          this.running = false;
+        }
+      };
+
+
+      this.reset = function() {
+        this.stop();
+        this.seconds = 0;
+        updateTimerDisplay(this.seconds); 
+      };
+    }
+
+    function updateTimerDisplay(seconds) {
+      document.getElementById("timerDisplay").textContent = `Timer: ${seconds} seconds`;
+    }
+
+    let timer = new Timer();
+
+    function storeSessionData() {
+      const userData = document.getElementById("username").value; // Get username from input field
+      sessionStorage.setItem("user", userData); // Store user data in session storage
+      document.getElementById("sessionInfo").innerText = "Session User: " + sessionStorage.getItem("user");
+      alert("Session data stored: " + sessionStorage.getItem("user"));
+    }
+
+    function onKeyDownHandler(event) {
+      console.log(`Key pressed: ${event.key}`);
+      document.getElementById("keyStatus").innerText = `Key pressed: ${event.key}`;
+    }
+
+    function onKeyUpHandler(event) {
+      console.log(`Key released: ${event.key}`);
+      document.getElementById("keyStatus").innerText = `Key released: ${event.key}`;
+    }
+
+    function onMouseOverHandler() {
+      console.log("Mouse hovered over the input field.");
+      document.getElementById("mouseStatus").innerText = "Mouse hovered over the input field.";
+    }
+
+    function onMouseOutHandler() {
+      console.log("Mouse left the input field.");
+      document.getElementById("mouseStatus").innerText = "Mouse left the input field.";
+    }
+
+    function handleButtonClick() {
+      const button = document.getElementById("startButton");
+
+      button.style.backgroundColor = "#ff5733"; 
+
+
+      if (!timer.running) {
+        timer.start();
+      } else {
+        timer.stop();
+        button.style.backgroundColor = "#4CAF50"; 
+      }
+    }
+
     function updateStates() {
       const countrySelect = document.getElementById("country");
       const stateSelect = document.getElementById("state");
@@ -45,10 +124,9 @@
           stateSelect.appendChild(option);
         }
       }
-      updateCities(); // Reset cities whenever country or state changes
+      updateCities(); 
     }
 
-    // On change event to update city dropdown based on selected state
     function updateCities() {
       const countrySelect = document.getElementById("country");
       const stateSelect = document.getElementById("state");
@@ -69,102 +147,36 @@
       }
     }
 
-    // Event listener to store session data
-    function storeSessionData() {
-      const userData = document.getElementById("username").value; // Get username from input field
-      sessionStorage.setItem("user", userData); // Store user data in session storage
-      document.getElementById("sessionInfo").innerText = "Session User: " + sessionStorage.getItem("user");
-      alert("Session data stored: " + sessionStorage.getItem("user"));
-    }
-
-    // On keydown event handler
-    function onKeyDownHandler(event) {
-      console.log(`Key pressed: ${event.key}`);
-      document.getElementById("keyStatus").innerText = `Key pressed: ${event.key}`;
-    }
-
-    // On keyup event handler
-    function onKeyUpHandler(event) {
-      console.log(`Key released: ${event.key}`);
-      document.getElementById("keyStatus").innerText = `Key released: ${event.key}`;
-    }
-
-    // On mouseover and on mouseout event handlers
-    function onMouseOverHandler() {
-      console.log("Mouse hovered over the input field.");
-      document.getElementById("mouseStatus").innerText = "Mouse hovered over the input field.";
-    }
-
-    function onMouseOutHandler() {
-      console.log("Mouse left the input field.");
-      document.getElementById("mouseStatus").innerText = "Mouse left the input field.";
-    }
-
-    // On click event to refresh the page
     function refreshPage() {
-      location.reload();  // Refresh the page on button click
+      location.reload();  
     }
 
-    // Capturing event example (using capture phase)
+
     window.addEventListener('click', function(event) {
       console.log('Captured click event:', event);
-    }, true); // Using capture phase (third argument is true)
+    }, true); 
 
-    // Timer Object
-    function Timer() {
-      this.seconds = 0;
-      this.timerInterval = null;
-      this.running = false;
+    document.addEventListener("DOMContentLoaded", function () {
 
-      // Start the timer
-      this.start = function() {
-        if (!this.running) {
-          this.running = true;
-          this.timerInterval = setInterval(() => {
-            this.seconds++;
-            updateTimerDisplay(this.seconds); // Update the timer on screen
-          }, 1000);
-        }
-      };
+      document.getElementById("country").addEventListener("change", updateStates);
+      document.getElementById("state").addEventListener("change", updateCities);
 
-      // Stop the timer
-      this.stop = function() {
-        if (this.running) {
-          clearInterval(this.timerInterval);
-          this.running = false;
-        }
-      };
+      
+      const inputField = document.getElementById("inputField");
+      inputField.addEventListener("keydown", onKeyDownHandler);
+      inputField.addEventListener("keyup", onKeyUpHandler);
+      inputField.addEventListener("mouseover", onMouseOverHandler);
+      inputField.addEventListener("mouseout", onMouseOutHandler);
 
-      // Reset the timer
-      this.reset = function() {
-        this.stop();
-        this.seconds = 0;
-        updateTimerDisplay(this.seconds); // Reset the display
-      };
-    }
 
-    // Update the timer display on the screen
-    function updateTimerDisplay(seconds) {
-      document.getElementById("timerDisplay").textContent = `Timer: ${seconds} seconds`;
-    }
+      document.getElementById("startButton").addEventListener("click", handleButtonClick);
 
-    let timer = new Timer();
+   
+      document.getElementById("storeSessionButton").addEventListener("click", storeSessionData);
 
-    // Function to handle button click and color change for timer
-    function handleButtonClick() {
-      const button = document.getElementById("startButton");
-
-      // Change color when the button is clicked
-      button.style.backgroundColor = "#ff5733"; // Red/orange color
-
-      // If the timer is not running, start it, otherwise stop it
-      if (!timer.running) {
-        timer.start();
-      } else {
-        timer.stop();
-        button.style.backgroundColor = "#4CAF50"; // Green when stopped
-      }
-    }
+      
+      document.getElementById("refreshButton").addEventListener("click", refreshPage);
+    });
   </script>
 </head>
 <body>
@@ -172,67 +184,65 @@
 <h1>Select Country, State, and City</h1>
 
 <form>
-  <!-- Country Dropdown -->
+  
   <label for="country">Country: </label>
-  <select id="country" name="country" onchange="updateStates()" required>
+  <select id="country" name="country" required>
     <option value="" disabled selected>Select Country</option>
     <option value="USA">USA</option>
     <option value="India">India</option>
   </select>
   <br><br>
 
-  <!-- State Dropdown -->
+ 
   <label for="state">State: </label>
-  <select id="state" name="state" onchange="updateCities()" required>
+  <select id="state" name="state" required>
     <option value="" disabled selected>Select State</option>
   </select>
   <br><br>
 
-  <!-- City Dropdown -->
+
   <label for="city">City: </label>
   <select id="city" name="city" required>
     <option value="" disabled selected>Select City</option>
   </select>
   <br><br>
 
-  <!-- Input field with key events and mouse events -->
+
   <label for="inputField">Enter Something: </label>
-  <input type="text" id="inputField" onkeydown="onKeyDownHandler(event)" onkeyup="onKeyUpHandler(event)"
-         onmouseover="onMouseOverHandler()" onmouseout="onMouseOutHandler()" readonly>
+  <input type="text" id="inputField" readonly>
   <br><br>
 
-  <!-- Text Field to input username for session storage -->
+
   <label for="username">Enter Username: </label>
   <input type="text" id="username" placeholder="Enter your username" required>
   <br><br>
 
-  <!-- Button to store session data -->
-  <button type="button" onclick="storeSessionData()">Store Session Data</button>
+
+  <button type="button" id="storeSessionButton">Store Session Data</button>
   <br><br>
 
-  <!-- Button to refresh the page -->
-  <button type="button" id="refreshButton" onclick="refreshPage()">Refresh Page</button>
+
+  <button type="button" id="refreshButton">Refresh Page</button>
   <br><br>
 
-  <!-- Button to start/stop the timer -->
-  <button type="button" id="startButton" onclick="handleButtonClick()">Start Timer</button>
+
+  <button type="button" id="startButton">Start Timer</button>
   <br><br>
 
-  <!-- Timer display -->
+
   <p id="timerDisplay">Timer: 0 seconds</p>
 </form>
 
-<!-- Display session data -->
+
 <p id="sessionInfo">Session User: </p>
 
-<!-- Status for key events -->
 <p id="keyStatus">Key events will be displayed here.</p>
 
-<!-- Status for mouse events -->
+
 <p id="mouseStatus">Mouse events will be displayed here.</p>
 
 <script>
-  // Displaying session info on page load if available
+  
   if (sessionStorage.getItem("user")) {
     document.getElementById("sessionInfo").innerText = "Session User: " + sessionStorage.getItem("user");
   }
