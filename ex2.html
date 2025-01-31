@@ -3,7 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dropdown Country, State, City</title>
+  <title>Dropdown Country, State, City and Timer</title>
+  <style>
+    #startButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #timerDisplay {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+  </style>
   <script>
     // Sample data for countries, states, and cities
     const data = {
@@ -98,6 +110,61 @@
       console.log('Captured click event:', event);
     }, true); // Using capture phase (third argument is true)
 
+    // Timer Object
+    function Timer() {
+      this.seconds = 0;
+      this.timerInterval = null;
+      this.running = false;
+
+      // Start the timer
+      this.start = function() {
+        if (!this.running) {
+          this.running = true;
+          this.timerInterval = setInterval(() => {
+            this.seconds++;
+            updateTimerDisplay(this.seconds); // Update the timer on screen
+          }, 1000);
+        }
+      };
+
+      // Stop the timer
+      this.stop = function() {
+        if (this.running) {
+          clearInterval(this.timerInterval);
+          this.running = false;
+        }
+      };
+
+      // Reset the timer
+      this.reset = function() {
+        this.stop();
+        this.seconds = 0;
+        updateTimerDisplay(this.seconds); // Reset the display
+      };
+    }
+
+    // Update the timer display on the screen
+    function updateTimerDisplay(seconds) {
+      document.getElementById("timerDisplay").textContent = `Timer: ${seconds} seconds`;
+    }
+
+    let timer = new Timer();
+
+    // Function to handle button click and color change for timer
+    function handleButtonClick() {
+      const button = document.getElementById("startButton");
+
+      // Change color when the button is clicked
+      button.style.backgroundColor = "#ff5733"; // Red/orange color
+
+      // If the timer is not running, start it, otherwise stop it
+      if (!timer.running) {
+        timer.start();
+      } else {
+        timer.stop();
+        button.style.backgroundColor = "#4CAF50"; // Green when stopped
+      }
+    }
   </script>
 </head>
 <body>
@@ -145,6 +212,14 @@
 
   <!-- Button to refresh the page -->
   <button type="button" id="refreshButton" onclick="refreshPage()">Refresh Page</button>
+  <br><br>
+
+  <!-- Button to start/stop the timer -->
+  <button type="button" id="startButton" onclick="handleButtonClick()">Start Timer</button>
+  <br><br>
+
+  <!-- Timer display -->
+  <p id="timerDisplay">Timer: 0 seconds</p>
 </form>
 
 <!-- Display session data -->
