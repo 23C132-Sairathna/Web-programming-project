@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doggy Guide - Food Tips (A-Z)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        header {
+            background-color: #ff6f61;
+            color: white;
+            padding: 20px 0;
+            font-size: 32px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #ff6f61;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .food-list {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .food-list li {
+            background-color: #fff;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .food-list li:hover {
+            background-color: #ffe0e0;
+            transform: scale(1.05);
+        }
+
+        .food-list li::after {
+            content: "Click for info";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        input[type="text"], textarea {
+            width: 80%;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: #ff6f61;
+            box-shadow: 0 0 8px rgba(255, 111, 97, 0.5);
+        }
+
+        button {
+            padding: 15px 30px;
+            margin-top: 20px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff5733;
+        }
+
+        .session-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e3ffd6;
+            border: 1px solid #c1f7a1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .hidden-section {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+        }
+
+        .readonly-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f3faff;
+            border: 1px solid #ccdfff;
+            border-radius: 8px;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>Doggy Guide - Food Tips A-Z</header>
+    <div class="container">
+        <h2>Popular Dog Food Tips (A-Z)</h2>
+        <ul class="food-list">
+            <li onclick="showTip('A')">A - Apples</li>
+            <li onclick="showTip('B')">B - Bananas</li>
+            <li onclick="showTip('C')">C - Carrots</li>
+            <li onclick="showTip('D')">D - Dairy</li>
+            <li onclick="showTip('E')">E - Eggs</li>
+            <li onclick="showTip('F')">F - Fish</li>
+        </ul>
+
+        <h3>Leave Your Tip for Us!</h3>
+        <input type="text" id="foodName" placeholder="Enter food name" onchange="handleFoodChange()" onfocus="clearMessage()">
+        <textarea id="foodTip" placeholder="Enter your food tip" onblur="handleFoodBlur()"></textarea>
+        <br>
+        <button onclick="submitTip()">Submit Tip</button>
+
+        <div id="message" class="session-info" style="display: none;"></div>
+
+        <div class="hidden-section" id="hiddenSection">
+            <h3>Exclusive Dog Food Tip</h3>
+            <p id="hiddenTipContent">Select a food from the list to reveal its tip!</p>
+        </div>
+
+        <div class="readonly-section">
+            <h3>Readonly Information</h3>
+            <textarea readonly>Dogs can enjoy a variety of foods, but it's essential to avoid foods like chocolate, grapes, and onions, as they are toxic to dogs. Always ensure food is properly prepared before offering it to your dog.</textarea>
+        </div>
+
+        <h3>Search Tips (Press a key):</h3>
+        <input type="text" id="searchBox" onkeyup="handleSearch(event)">
+        <div id="searchResult" style="display: none; margin-top: 10px;">Searching...</div>
+
+        <p class="session-info" id="sessionInfo"></p>
+    </div>
+
+    <script>
+        // Handle Session Storage
+        if (sessionStorage.getItem("visited") !== "true") {
+            sessionStorage.setItem("visited", "true");
+            alert("Welcome to the Doggy Food Guide! This is your first visit.");
+        }
+
+        function displaySessionInfo() {
+            const sessionMessage = "Your session ID is: " + sessionStorage.getItem("sessionID");
+            document.getElementById("sessionInfo").textContent = sessionMessage;
+        }
+
+        // Key event listener: Capture keyup to filter food list based on input
+        function handleSearch(event) {
+            const searchQuery = event.target.value.toLowerCase();
+            const items = document.querySelectorAll(".food-list li");
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchQuery)) {
+                    item.style.display = "list-item";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+            if (searchQuery) {
+                document.getElementById("searchResult").style.display = "block";
+            } else {
+                document.getElementById("searchResult").style.display = "none";
+            }
+        }
+
+        // Mouse event listener: Handle hover
+        document.querySelector('.food-list').addEventListener('mouseover', function(event) {
+            if (event.target.tagName === 'LI') {
+                event.target.style.backgroundColor = '#ffd6cc';
+            }
+        });
+
+        // Mouse event listener: Handle mouseout
+        document.querySelector('.food-list').addEventListener('mouseout', function(event) {
+            if (event.target.tagName === 'LI') {
+                event.target.style.backgroundColor = '#fff';
+            }
+        });
+
+        // Show specific tip when food item is clicked
+        function showTip(food) {
+            let tipContent = '';
+            if (food === 'A') {
+                tipContent = "Apples are rich in fiber and vitamin C. Remove seeds to avoid cyanide poisoning!";
+            } else if (food === 'B') {
+                tipContent = "Bananas are packed with potassium and are an excellent low-calorie treat.";
+            } else if (food === 'C') {
+                tipContent = "Carrots help clean your dog's teeth and are low-calorie snacks!";
+            } else if (food === 'D') {
+                tipContent = "Dairy products like cheese can be given in small amounts, but avoid if your dog is lactose intolerant.";
+            } else if (food === 'E') {
+                tipContent = "Eggs provide high-quality protein and essential fatty acids for your dog’s health.";
+            } else if (food === 'F') {
+                tipContent = "Fish, rich in Omega-3, can improve your dog’s skin and coat health.";
+            }
+            document.getElementById("hiddenTipContent").textContent = tipContent;
+            document.getElementById("hiddenSection").style.display = 'block';
+        }
+
+        // Form submission handler
+        function submitTip() {
+            const foodName = document.getElementById("foodName").value;
+            const foodTip = document.getElementById("foodTip").value;
+
+            if (foodName && foodTip) {
+                const message = `Thanks for your tip on ${foodName}: ${foodTip}`;
+                document.getElementById("message").textContent = message;
+                document.getElementById("message").style.display = "block";
+                document.getElementById("message").classList.add("success-message");
+            } else {
+                document.getElementById("message").textContent = "Please fill in both fields.";
+                document.getElementById("message").style.display = "block";
+                document.getElementById("message").classList.add("error-message");
+            }
+        }
+
+        // Clear any message on input focus
+        function clearMessage() {
+            document.getElementById("message").style.display = "none";
+        }
+
+        // Handling onchange event for food name input
+        function handleFoodChange() {
+            const foodName = document.getElementById("foodName").value;
+            console.log("Food Name changed to:", foodName);
+        }
+
+        // Handling onblur event (when foodTip input loses focus)
+        function handleFoodBlur() {
+            console.log("Food Tip field lost focus.");
+        }
+
+        // Handling refresh using sessionStorage
+        window.addEventListener('beforeunload', function() {
+            sessionStorage.setItem("sessionID", Date.now());
+        });
+
+        // Show session info on page load
+        window.onload = displaySessionInfo;
+    </script>
+</body>
+</html>
