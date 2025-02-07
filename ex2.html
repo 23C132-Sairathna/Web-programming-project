@@ -69,8 +69,8 @@
     let timer = new Timer();
 
     function storeSessionData() {
-      const userData = document.getElementById("username").value; // Get username from input field
-      sessionStorage.setItem("user", userData); // Store user data in session storage
+      const userData = document.getElementById("username").value; 
+      sessionStorage.setItem("user", userData); 
       document.getElementById("sessionInfo").innerText = "Session User: " + sessionStorage.getItem("user");
       alert("Session data stored: " + sessionStorage.getItem("user"));
     }
