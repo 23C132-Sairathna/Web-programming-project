@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Clinic Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            color: #4caf61;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .button-container button {
+            padding: 20px 40px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            margin: 10px;
+        }
+        .button-container button i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+        .form-container {
+            display: none;
+            margin-top: 20px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 8px;
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #eaf7e7;
+            border-left: 6px solid #4CAF50;
+            border-radius: 8px;
+        }
+        .response h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome to the Dog Clinic Dashboard</h1>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <button id="vaccinationScheduleBtn"><i class="fas fa-syringe"></i>Vaccination Schedule</button>
+            <button id="foodDietBtn"><i class="fas fa-bone"></i>Food Diet</button>
+            <button id="clinicAppointmentBtn"><i class="fas fa-calendar-check"></i>Clinic Appointment</button>
+            <button id="editProfileBtn"><i class="fas fa-user-edit"></i>Edit Profile</button>
+        </div>
+
+        <!-- Clinic Appointment Form (Initially hidden) -->
+        <div class="form-container" id="clinicForm">
+            <h2>Dog Appointment Form</h2>
+            <form id="dogForm">
+                <label for="dogName">Dog's Name</label>
+                <input type="text" id="dogName" name="dogName" required>
+
+                <label for="dogBreed">Dog's Breed</label>
+                <input type="text" id="dogBreed" name="dogBreed" required>
+
+                <label for="dogAge">Dog's Age (in years)</label>
+                <input type="number" id="dogAge" name="dogAge" required>
+
+                <label for="appointmentDate">Preferred Appointment Date</label>
+                <input type="date" id="appointmentDate" name="appointmentDate" required>
+
+                <label for="concerns">Additional Concerns</label>
+                <textarea id="concerns" name="concerns"></textarea>
+
+                <button type="submit">Book Appointment</button>
+            </form>
+
+            <div class="response"></div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Hide all content initially
+            $(".form-container").hide();
+
+            // Show the clinic appointment form when the button is clicked
+            $("#clinicAppointmentBtn").click(function() {
+                $(".form-container").hide(); // Hide all other forms
+                $("#clinicForm").fadeIn(); // Show the clinic appointment form with fade effect
+            });
+
+            // Handle form submission (no backend, simulate success)
+            $("#dogForm").on("submit", function(event) {
+                event.preventDefault();  // Prevent form from submitting
+
+                var dogName = $("#dogName").val();
+                var dogBreed = $("#dogBreed").val();
+                var dogAge = $("#dogAge").val();
+                var appointmentDate = $("#appointmentDate").val();
+                var concerns = $("#concerns").val();
+
+                // Simulate successful appointment submission
+                $(".response").html(`
+                    <h3>Appointment Booked Successfully!</h3>
+                    <p><strong>Dog's Name:</strong> ${dogName}</p>
+                    <p><strong>Breed:</strong> ${dogBreed}</p>
+                    <p><strong>Age:</strong> ${dogAge} years</p>
+                    <p><strong>Appointment Date:</strong> ${appointmentDate}</p>
+                    <p><strong>Additional Concerns:</strong> ${concerns}</p>
+                `).fadeIn();
+
+                // Clear form after submission
+                $("#dogForm")[0].reset();
+            });
+
+            // Show other content when the other buttons are clicked (add placeholders)
+            $("#vaccinationScheduleBtn, #foodDietBtn, #editProfileBtn").click(function() {
+                $(".form-container").hide();  // Hide all form containers
+                $(".response").html(""); // Clear any previous messages
+                alert("This is a placeholder for " + $(this).text() + " content.");
+            });
+        });
+    </script>
+</body>
+</html>
