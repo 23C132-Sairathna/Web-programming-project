@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Details Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 280px; /* Reduced width */
+            margin: 0 auto;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px; /* Adjusted padding */
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* To make sure padding doesn’t exceed width */
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Enter Dog's Details</h2>
+
+    <label for="dogName">Dog's Name:</label>
+    <input type="text" id="dogName" name="dogName"><br>
+
+    <label for="breed">Breed:</label>
+    <input type="text" id="breed" name="breed"><br>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age"><br>
+
+    <label for="weight">Weight (kg):</label>
+    <input type="number" id="weight" name="weight"><br>
+
+    <label for="lastVaccination">Last Vaccination Date:</label>
+    <input type="date" id="lastVaccination" name="lastVaccination"><br>
+
+    <label for="vaccinationType">Vaccination Type:</label>
+    <select id="vaccinationType" name="vaccinationType">
+        <option value="Rabies">Rabies</option>
+        <option value="Distemper">Distemper</option>
+        <option value="Parvovirus">Parvovirus</option>
+        <option value="Bordetella">Bordetella</option>
+    </select><br>
+
+    <label for="majorDiseases">Major Diseases (comma-separated):</label>
+    <input type="text" id="majorDiseases" name="majorDiseases"><br>
+
+    <label for="surgeries">Surgeries (comma-separated):</label>
+    <input type="text" id="surgeries" name="surgeries"><br>
+
+    <label for="clinicName">Clinic Name:</label>
+    <input type="text" id="clinicName" name="clinicName"><br>
+
+    <button type="submit" id="submitBtn">Submit</button>
+
+    <script>
+        $(document).ready(function () {
+            $("#submitBtn").click(function (e) {
+                e.preventDefault(); // Prevent form submission
+
+                // Form validation
+                let isValid = true;
+                if ($("#dogName").val() === "") {
+                    isValid = false;
+                }
+                if ($("#breed").val() === "") {
+                    isValid = false;
+                }
+                if ($("#age").val() === "") {
+                    isValid = false;
+                }
+                if ($("#weight").val() === "") {
+                    isValid = false;
+                }
+                if ($("#lastVaccination").val() === "") {
+                    isValid = false;
+                }
+                if ($("#majorDiseases").val() === "") {
+                    isValid = false;
+                }
+                if ($("#surgeries").val() === "") {
+                    isValid = false;
+                }
+                if ($("#clinicName").val() === "") {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    // If valid, gather the form data
+                    let formData = {
+                        dogName: $("#dogName").val(),
+                        breed: $("#breed").val(),
+                        age: $("#age").val(),
+                        weight: $("#weight").val(),
+                        lastVaccination: $("#lastVaccination").val(),
+                        vaccinationType: $("#vaccinationType").val(),
+                        majorDiseases: $("#majorDiseases").val(),
+                        surgeries: $("#surgeries").val(),
+                        clinicName: $("#clinicName").val()
+                    };
+
+                    // Display the dog details directly in the body
+                    let dogDetails = `
+                        <h3>Dog's Details:</h3>
+                        <p><strong>Name:</strong> ${formData.dogName}</p>
+                        <p><strong>Breed:</strong> ${formData.breed}</p>
+                        <p><strong>Age:</strong> ${formData.age} years</p>
+                        <p><strong>Weight:</strong> ${formData.weight} kg</p>
+                        <p><strong>Last Vaccination:</strong> ${formData.lastVaccination}</p>
+                        <p><strong>Vaccination Type:</strong> ${formData.vaccinationType}</p>
+                        <p><strong>Major Diseases:</strong> ${formData.majorDiseases}</p>
+                        <p><strong>Surgeries:</strong> ${formData.surgeries}</p>
+                        <p><strong>Clinic Name:</strong> ${formData.clinicName}</p>
+                    `;
+                    
+                    $("body").append(dogDetails); // Append the details directly below the form
+                }
+            });
+        });
+    </script>
+</body>
+</html>
