@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Details Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                background-color: #e6ccff;
+                color: #4a0472;
+            }
+        
+            h2 {
+                text-align: center;
+                color: #3d005e;
+            }
+        
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 50px;
+                max-width: 600px;
+                margin: auto;
+            }
+        
+            label {
+                font-weight: bold;
+                display: block;
+            }
+        
+            input,
+            select {
+                padding: 10px;
+                width: 100%;
+                border: 2px solid #6a0572;
+                border-radius: 5px;
+                background: #fdf7ff;
+                color: #4a0472;
+            }
+        
+            .btn {
+                padding: 10px 15px;
+                cursor: pointer;
+                background: #ffcc00;
+                color: #4a0472;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                margin: 10px 5px;
+                display: inline-block;
+            }
+        
+            .btn-remove {
+                background: #ff4d4d;
+                color: #fff;
+                border-radius: 5px;
+            }
+        
+            .submit-btn {
+                display: block;
+                width: 100%;
+                background: #3d005e;
+                color: white;
+                font-size: 18px;
+                margin-top: 15px;
+            }
+            .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+    background: white;
+    padding: 20px;
+    border: 2px solid #6a0572;
+    box-shadow: 0px 0px 15px gray;
+    overflow: auto;
+}
+
+.popup h3 {
+    text-align: center;
+    color: #3d005e;
+}
+
+.popup table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.popup table, th, td {
+    border: 2px solid #6a0572;
+}
+
+.popup th, .popup td {
+    padding: 10px;
+    text-align: left;
+    color: #4a0472;
+}
+
+.popup th {
+    background-color: #e6ccff;
+    font-weight: bold;
+}
+
+.popup .btn {
+    display: block;
+    margin: 20px auto;
+    background: #ff4d4d;
+    color: white;
+}
+
+        
+            
+        </style>
+    <script>
+        $(document).ready(function () {
+            $("#addVaccination").click(function () {
+                $("#vaccinationFields").append('<div><input type="text" name="vaccination[]" placeholder="Vaccination Name" required> <input type="date" name="vaccination_date[]" required> <button type="button" class="btn-remove">Remove</button></div>');
+            });
+
+            $("#addDisease").click(function () {
+                $("#diseaseFields").append('<div><input type="text" name="disease[]" placeholder="Chronic Disease Name" required> <button type="button" class="btn-remove">Remove</button></div>');
+            });
+
+            $("#addSurgery").click(function () {
+                $("#surgeryFields").append('<div><input type="text" name="surgery[]" placeholder="Surgery Name" required> <input type="date" name="surgery_date[]"> <button type="button" class="btn-remove">Remove</button></div>');
+            });
+
+            $("#hasAllergies").change(function () {
+                if ($(this).val() === "yes") {
+                    $("#allergyDetails").show();
+                } else {
+                    $("#allergyDetails").hide();
+                }
+            });
+
+            $("#addAllergy").click(function () {
+                $("#allergyDetails").append('<div><input type="text" name="allergy_details[]" placeholder="Allergy Name" required> <button type="button" class="btn-remove">Remove</button></div>');
+            });
+
+            $(document).on("click", ".btn-remove", function () {
+                $(this).parent().remove();
+            });
+
+            $("#dogForm").submit(function (event) {
+                event.preventDefault();
+                let valid = true;
+
+                $("input[required]").each(function () {
+                    if ($(this).val().trim() === "") {
+                        valid = false;
+                        alert("Please fill in all required fields or remove the empty fields.");
+                        return false;
+                    }
+                });
+
+                if (!valid) return;
+
+                let formData = $(this).serializeArray();
+                let dataMap = {};
+
+                // Organizing form data into a structured object
+                formData.forEach(field => {
+                    let key = field.name.replace(/\[\]/g, ""); // Remove square brackets
+                    if (!dataMap[key]) {
+                        dataMap[key] = [];
+                    }
+                    dataMap[key].push(field.value);
+                });
+
+                // Building the formatted table
+                let tableContent = "<h3>Submitted Details</h3><table><tr><th>Field</th><th>Value</th></tr>";
+
+                for (let key in dataMap) {
+                    if (["vaccination", "surgery"].includes(key)) {
+                        tableContent += `<tr><td colspan="2" style="background:#e6ccff; font-weight:bold;">${key.charAt(0).toUpperCase() + key.slice(1)}</td></tr>`;
+
+                        for (let i = 0; i < dataMap[key].length; i++) {
+                            tableContent += `<tr><td>Name</td><td>${dataMap[key][i] || "N/A"}</td></tr>`;
+
+                            // Fetch and display corresponding dates
+                            let dateKey = key + "_date";
+                            if (dataMap[dateKey] && dataMap[dateKey][i]) {
+                                tableContent += `<tr><td>Date</td><td>${dataMap[dateKey][i]}</td></tr>`;
+                            }
+                        }
+                    }
+                    else if (key === "disease") {
+                        tableContent += `<tr><td colspan="2" style="background:#e6ccff; font-weight:bold;">Chronic Diseases</td></tr>`;
+                        dataMap[key].forEach(disease => {
+                            tableContent += `<tr><td>Name</td><td>${disease}</td></tr>`;
+                        });
+                    }
+                    else if (key === "allergy_details") {
+                        tableContent += `<tr><td colspan="2" style="background:#e6ccff; font-weight:bold;">Allergies</td></tr>`;
+                        dataMap[key].forEach(allergy => {
+                            tableContent += `<tr><td>Name</td><td>${allergy}</td></tr>`;
+                        });
+                    }
+                    else if (!["vaccination_date", "surgery_date"].includes(key)) {
+                        // Exclude Vaccination_date and Surgery_date from separate listing
+                        tableContent += `<tr><td>${key.charAt(0).toUpperCase() + key.slice(1)}</td><td>${dataMap[key].join(", ")}</td></tr>`;
+                    }
+                }
+
+                tableContent += "</table>";
+                $("#popupContent").html(tableContent);
+                $("#popup").show();
+            });
+
+
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+
+            // Close popup
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+
+
+
+            $("#closePopup").click(function () {
+                $("#popup").hide();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h2>Dog Details Form</h2>
+    <form id="dogForm">
+        <div class="grid-container">
+            <div><label>Name:</label><input type="text" name="name" required ></div>
+            <div><label>Age:</label><input type="number" name="age" required></div>
+            <div><label>Gender:</label><select name="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select></div>
+            <div><label>Breed:</label><input type="text" name="breed" required></div>
+        </div>
+
+        <h3>Vaccinations</h3>
+        <div id="vaccinationFields"></div>
+        <button type="button" class="btn" id="addVaccination">Add Vaccination</button>
+
+        <h3>Chronic Diseases</h3>
+        <div id="diseaseFields"></div>
+        <button type="button" class="btn" id="addDisease">Add Disease</button>
+
+        <h3>Major Surgeries (if any)</h3>
+        <div id="surgeryFields"></div>
+        <button type="button" class="btn" id="addSurgery">Add Surgery</button>
+
+        <h3>Allergies</h3>
+        <label>Does your dog have any allergies?</label>
+        <select id="hasAllergies">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select>
+        <div id="allergyDetails" style="display:none;"><button type="button" class="btn" id="addAllergy">Add
+                Allergy</button></div>
+
+        <button type="submit" class="btn submit-btn">Submit</button>
+    </form>
+
+    <div id="popup" class="popup">
+        <div id="popupContent"></div>
+        <button id="closePopup" class="btn">Close</button>
+    </div>
+</body>
+
+</html>
